@@ -1,4 +1,6 @@
 class Game {
+  int prevx;
+  int prevy;
   int playerx;
   int playery;
 
@@ -7,14 +9,14 @@ class Game {
 
   int SIZE = 8;
   int[][] grid = {
-    {1, 1, 1, 1, 1, 1, 1, 1}, 
-    {2, 2, 2, 2, 2, 2, 2, 1}, // 1 - (-1) reward
-    {1, 1, 1, 1, 1, 1, 1, 1}, // 2 - die, -100 reward
-    {1, 2, 2, 2, 2, 2, 2, 2}, // 3 - win, 100 reward
-    {1, 1, 1, 1, 1, 1, 1, 1}, // the matrix should be transposed but I'm too lazy to do that
-    {2, 2, 2, 2, 2, 2, 2, 1}, 
-    {1, 1, 1, 1, 1, 1, 1, 1}, 
-    {2, 2, 3, 2, 2, 2, 2, 2}
+    {1, 1, 1, 2, 1, 1, 2, 1}, 
+    {1, 2, 1, 1, 1, 1, 1, 1}, // 1 - (-1) reward
+    {1, 2, 2, 2, 2, 1, 2, 1}, // 2 - die, -100 reward
+    {1, 1, 2, 1, 2, 2, 1, 1}, // 3 - win, 100 reward
+    {1, 1, 1, 1, 2, 1, 1, 1}, 
+    {1, 2, 2, 2, 2, 2, 2, 1}, 
+    {1, 1, 2, 1, 1, 1, 2, 1}, 
+    {2, 1, 1, 1, 2, 1, 1, 3}
   };
 
   PVector drawPlace, drawSize;
@@ -28,6 +30,8 @@ class Game {
   }
 
   void reset() {
+    prevx = initialx;
+    prevy = initialy;
     playerx = initialx;
     playery = initialy;
   }
@@ -54,13 +58,20 @@ class Game {
 
   void showPlayer() {
     fill(255);
-    rect(drawPlace.x + playerx * drawSize.x / SIZE + drawSize.x / SIZE / 3, 
-      drawPlace.y + playery * drawSize.y / SIZE + drawSize.y / SIZE / 3, 
-      drawSize.x / SIZE / 3, 
-      drawSize.y / SIZE / 3);
+    /*float x = map(frameCount%divider, 0, divider,
+                  drawPlace.x + prevx * drawSize.x / SIZE + drawSize.x / SIZE / 3,
+                  drawPlace.x + playerx * drawSize.x / SIZE + drawSize.x / SIZE / 3);
+    float y = map(frameCount%divider, 0, divider,
+                  drawPlace.y + prevy * drawSize.y / SIZE + drawSize.y / SIZE / 3,
+                  drawPlace.y + playery * drawSize.y / SIZE + drawSize.y / SIZE / 3);*/
+    float x = drawPlace.x + playerx * drawSize.x / SIZE + drawSize.x / SIZE / 3;
+    float y = drawPlace.y + playery * drawSize.y / SIZE + drawSize.y / SIZE / 3;
+    rect(x, y, drawSize.x / SIZE / 3, drawSize.y / SIZE / 3);
   }
 
   Response step(int move) {
+    prevx = playerx;
+    prevy = playery;
     move(move);
     boolean end = checkEnd();
     int reward = getReward();

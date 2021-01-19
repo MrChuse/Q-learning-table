@@ -54,18 +54,12 @@ class AI {
   }
 
   int pickMove(Response r) {
-    float e = random(1);
-    if (e < epsilon) {
-      lastx = r.x;
-      lasty = r.y;
-      return int(random(moves)); //pick random move if you want to observe the space
-    }
-    return pickBestMove(r);
-  }
-
-  int pickBestMove(Response r) {
     lastx = r.x;
     lasty = r.y;
+    float e = random(1);
+    if (e < epsilon) {
+      return int(random(moves)); //pick random move if you want to observe the space
+    }
     int m = 0;
     for (int i = 0; i < moves; i++) {
       if (qt[r.x][r.y][i] > qt[r.x][r.y][m]) { //pick the best move if you want to abuse the knowledge
